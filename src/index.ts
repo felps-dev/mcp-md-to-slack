@@ -5,7 +5,9 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { markdownToSlack } from "md-to-slack";
 import * as fs from "fs";
+import * as os from "os";
 import * as path from "path";
+import * as crypto from "crypto";
 
 const server = new McpServer({
   name: "md-to-slack",
@@ -30,18 +32,15 @@ server.tool(
 // Tool 2: Convert markdown to Slack mrkdwn and save to a file
 server.tool(
   "convert_md_to_slack_file",
-  "Converts Markdown text to Slack-compatible mrkdwn format and saves it to a file",
+  "Converts Markdown text to Slack-compatible mrkdwn format and saves it to a temp file",
   {
     markdown: z.string().describe("The Markdown text to convert to Slack format"),
-    outputPath: z
-      .string()
-      .optional()
-      .describe("Output file path (default: ./slack-message.txt)"),
   },
-  async ({ markdown, outputPath }) => {
+  async ({ markdown }) => {
     const slackText = markdownToSlack(markdown);
-    const filePath = outputPath || "./slack-message.txt";
-    const resolvedPath = path.resolve(filePath);
+    const tmpDir = os.tmpdir();
+    const randomName = `slack-msg-${crypto.randomBytes(6).toString("hex")}.txt`;
+    const resolvedPath = path.join(tmpDir, randomName);
 
     fs.writeFileSync(resolvedPath, slackText, "utf-8");
 
