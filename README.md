@@ -20,37 +20,13 @@ npm run build
 
 ## Usage
 
-### Claude Desktop
+From the project directory, register the MCP server:
 
-Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
-
-```json
-{
-  "mcpServers": {
-    "md-to-slack": {
-      "command": "node",
-      "args": ["/absolute/path/to/mcp-md-to-slack/dist/index.js"]
-    }
-  }
-}
+```bash
+claude mcp add md-to-slack -- node /absolute/path/to/mcp-md-to-slack/dist/index.js
 ```
 
-### Claude Code
-
-Add to `.mcp.json` in your project root:
-
-```json
-{
-  "mcpServers": {
-    "md-to-slack": {
-      "command": "node",
-      "args": ["/absolute/path/to/mcp-md-to-slack/dist/index.js"]
-    }
-  }
-}
-```
-
-Restart Claude Desktop or Claude Code after configuring.
+Then restart Claude Code to pick up the new tools.
 
 ## Conversion Examples
 
